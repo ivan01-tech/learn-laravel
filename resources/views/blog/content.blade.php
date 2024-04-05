@@ -8,7 +8,7 @@
     @foreach ($posts as $item)
         <article>
             <h3>
-                <a href="{{ route('blog.show', ['slug' => $item->slug, 'id' => $item->id]) }}">
+                <a href="{{ route('blog.show', ['slug' => $item->slug, 'post' => $item->id]) }}">
 
                     {{ $item->title }}
                 </a>

@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\PostController;
-use App\Models\Post;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,8 +19,10 @@ Route::get('/', function () {
 });
 Route::prefix("/blog")->controller(PostController::class)->group(function () {
 
-    Route::get('',  "index")->name('blog.index');
+    Route::get('/',  "index")->name('blog.index');
+    Route::get('/new',  "create")->name('blog.create');
+    Route::post('/new',  "store")->name('blog.store');
     // Route::get('', [PostController::class, "index"])->name('blog.index');
 
-    Route::get("/{slug}-{id}", "getPostById")->where(["id" => "[0-9]+", "slug" => "[0-9A-Za-z\.\-\_]+"])->name('blog.show');
+    Route::get("/{slug}-{post}", "getPostById")->where(["post" => "[0-9]+", "slug" => "[0-9A-Za-z\.\-\_]+"])->name('blog.show');
 });

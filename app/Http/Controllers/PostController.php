@@ -2,11 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostFilterRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Str;
 
 class PostController extends Controller
 {
+
+    public function create()
+    {
+        return view('blog.create');
+    }
+
+
+    public function store(PostFilterRequest $request)
+    {
+        // dd($request->all());
+        $post = Post::create([
+            "title" => $request->input("title"),
+            "content" => $request->input("content"),
+            "slug" => Str::slug($request->input("title")),
+        ]);
+        // dd($post);
+        return redirect()->route("blog.show", [
+            "post" => $post->id,
+            "slug" => $post->slug,
+        ])->with('success', "Successfully created !");
+    }
     public function index(Request $request)
     {
 
@@ -59,11 +82,13 @@ class PostController extends Controller
     }
 
     // 
-    function getPostById(Request $request, string $slug, string $id)
+    // model binding here !
+    function getPostById(Request $request, string $slug, Post $post)
     {
-        $post  = Post::findOrFail($id);
+        // $post  = Post::findOrFail($post);
+
         if ($post->slug !== $slug) {
-            return to_route("blog.show", ["slug" => $post->slug, "id" => $id]);
+            return to_route("blog.show", ["slug" => $post->slug, "id" => $post]);
         }
         // return [
         //     "slug" => $slug,
