@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Str;
 
 class PostFilterRequest extends FormRequest
@@ -25,7 +26,7 @@ class PostFilterRequest extends FormRequest
         return [
             "title" => "required|string|min:6|regex:/^[a-zA-Z.-_]+/",
             "content" => "required",
-            "slug" => "required",
+            "slug" => ["required", Rule::unique("posts")->ignore($this->route()->parameter("post"))],
         ];
     }
 
@@ -34,5 +35,6 @@ class PostFilterRequest extends FormRequest
         $this->merge([
             "slug" => $this->input("slug") ? $this->input("slug") : Str::slug($this->input("title"))
         ]);
+        // dd($this->all());
     }
 }

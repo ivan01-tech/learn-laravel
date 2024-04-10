@@ -22,6 +22,9 @@ Route::prefix("/blog")->controller(PostController::class)->group(function () {
     Route::get('/',  "index")->name('blog.index');
     Route::get('/new',  "create")->name('blog.create');
     Route::post('/new',  "store")->name('blog.store');
+
+    Route::get('/{post}/edit',  "edit")->name('blog.edit');
+    Route::patch('/{post}/edit',  "update")->name('blog.update');
     // Route::get('', [PostController::class, "index"])->name('blog.index');
 
     Route::get("/{slug}-{post}", "getPostById")->where(["post" => "[0-9]+", "slug" => "[0-9A-Za-z\.\-\_]+"])->name('blog.show');

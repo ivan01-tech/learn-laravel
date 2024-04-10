@@ -12,14 +12,40 @@ class PostController extends Controller
 
     public function create()
     {
-        return view('blog.create');
+        $post = new Post();
+        return view('blog.create', [
+            'post' => $post
+        ]);
+    }
+
+    public function edit(Post $post)
+    {
+        return view('blog.edit', [
+            'post' => $post
+        ]);
     }
 
 
     public function store(PostFilterRequest $request)
     {
         // dd($request->all());
-        $post = Post::create([
+        // $post = Post::create([
+        //     "title" => $request->input("title"),
+        //     "content" => $request->input("content"),
+        //     "slug" => Str::slug($request->input("title")),
+        // ]);
+        // TODO : remmenber it
+        $post = Post::create($request->validated());
+        // dd($post);
+        return redirect()->route("blog.show", [
+            "post" => $post->id,
+            "slug" => $post->slug,
+        ])->with('success', "Successfully created !");
+    }
+
+    public function update(Post $post, PostFilterRequest $request)
+    {
+        $post->update([
             "title" => $request->input("title"),
             "content" => $request->input("content"),
             "slug" => Str::slug($request->input("title")),
@@ -28,7 +54,7 @@ class PostController extends Controller
         return redirect()->route("blog.show", [
             "post" => $post->id,
             "slug" => $post->slug,
-        ])->with('success', "Successfully created !");
+        ])->with('success', "Successfully modified !");
     }
     public function index(Request $request)
     {
